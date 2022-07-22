@@ -1,0 +1,42 @@
+.msgpage {
+  height: inherit;
+  display: grid;
+  grid-template-areas: "navigation details" "navigation chat" "search chat" "list chat" "list message";
+  grid-template-rows: 15px 20px 30px auto 60px;
+  grid-template-columns: 30% auto;
+  width: 810vh;
+  background-color: blue;
+  /* margin-top: 8vh; */
+}
+
+.messageCenterContainer {
+  display: flex;
+
+  min-height: 92vh;
+  width: initial;
+}
+.msgpage .navigation {
+  grid-area: navigation;
+  background-color: white;
+}
+
+.msgpage .search {
+  grid-area: search;
+  background-color: #f2f2f2;
+}
+.msgpage .list {
+  grid-area: list;
+  background-color: white;
+}
+.msgpage .details {
+  grid-area: details;
+  background-color: red;
+}
+.msgpage .chat {
+  grid-area: chat;
+  background-color: aquamarine;
+}
+.msgpage .message {
+  grid-area: message;
+  background-color: hotpink;
+}

@@ -1,0 +1,258 @@
+
+Hostname: mapi-web-india-instance-1a
+Pub IP: 35.200.139.245
+PvtIP: 10.128.4.76
+
+Hostname: mapi-web-india-instance-2b
+Pub IP: 34.93.244.13
+PvtIP: 10.128.4.77
+
+LB IP: 34.117.202.22
+
+
+
+
+UNABLE to find
+http://enq2.intermesh.net/enquiry/getTemplateList/
+http://enq2.intermesh.net/enquiry/findEnquiry
+http://enq2.intermesh.net/enquiry/findMail
+http://enq2.intermesh.net/enquiry/userFolder
+http://enq2.intermesh.net/addressbook/enqdetailContact/
+
+
+
+
+
+
+
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { fetchUD_Data } from "../../../Redux/UserDetails/ud_actions";
+import "./List.css";
+import { store } from "../../../Redux/store";
+import {
+  getCookieValByKey,
+  deleteCookie,
+} from "../../../Globals/CookieManager";
+import "regenerator-runtime/runtime";
+import * as ReactDOM from "react-dom";
+import { goToRoute } from "../../../Globals/routingFunction";
+import InfiniteScroll from "react-infinite-scroll-component";
+const axios = require("axios");
+
+import { connect } from "react-redux";
+
+export default class ListComponent extends Component {
+  constructor(props) {
+    super(props);
+  }
+  state = {
+    contact: "",
+    last_contact_date: "",
+    start: 0,
+    end: 0,
+    total_count: 0,
+    glid_arr: [],
+  };
+
+  contact_list = async () => {
+    let url = "/miscreact/ajaxrequest/messages/contactlist";
+
+    this.setState({ start: 1 });
+    this.setState({ end: 20 });
+    let params = {
+      glusrid: "127253317",
+      start: "1",
+      end: "20",
+      modid: "MY",
+      AK: "eyJ0eXAiOiJKV1QiLCJhbGciOiJzaGEyNTYifQ.eyJpc3MiOiJVU0VSIiwiYXVkIjoiOCo5KjQqMCo3KiIsImV4cCI6MTY1NDc3MjkyOCwiaWF0IjoxNjU0Njg2NTI4LCJzdWIiOiIxMjcyNTMzMTciLCJjZHQiOiIwOC0wNi0yMDIyIn0.LOHvB0U8ZXUDXLrqb9g1k95SPjOUDnc7e-3fVKssK4U",
+    };
+    const res = axios.post(url, params).then((response) => {
+      this.setState({ contact: response.data.result });
+      console.log(response);
+      if (response) {
+        this.setState({ total_count: response.data.count });
+        const newdata = response.data.result;
+        this.setState({
+          last_contact_date:
+            newdata[Object.keys(newdata)[Object.keys(newdata).length - 1]]
+              .last_contact_date,
+        });
+        const glid_ar = [];
+        newdata.map((content) => glid_ar.push(content.contacts_glid));
+        console.log(glid_ar);
+        this.setState({
+          glid_arr: glid_ar,
+        });
+
+        this.usuallyReplies(glid_ar);
+      }
+    });
+  };
+
+  fetchMoreData = (async) => {
+    this.get_more_contacts();
+  };
+
+  get_more_contacts = (async) => {
+    console.log("the value of contactdate is ", this.state.last_contact_date);
+    let url = "/miscreact/ajaxrequest/messages/contactlist";
+
+    let params = {
+      glusrid: "127253317",
+      start: this.state.start + 21,
+      end: this.state.end + 21,
+      modid: "MY",
+      AK: "eyJ0eXAiOiJKV1QiLCJhbGciOiJzaGEyNTYifQ.eyJpc3MiOiJVU0VSIiwiYXVkIjoiOCo5KjQqMCo3KiIsImV4cCI6MTY1NDc3MjkyOCwiaWF0IjoxNjU0Njg2NTI4LCJzdWIiOiIxMjcyNTMzMTciLCJjZHQiOiIwOC0wNi0yMDIyIn0.LOHvB0U8ZXUDXLrqb9g1k95SPjOUDnc7e-3fVKssK4U",
+      last_contact_date: this.state.last_contact_date,
+    };
+
+    this.setState({ start: this.state.start + 21 });
+    this.setState({ end: this.state.end + 21 });
+
+    const res = axios.post(url, params).then((response) => {
+      if (response) {
+        console.log(this.state.contact.at(-1));
+        this.setState({
+          contact: this.state.contact.concat(response.data.result),
+        });
+
+        console.log("view more", response.data.result);
+      }
+    });
+  };
+
+  usuallyReplies = (props) => {
+    let url = "/miscreact/ajaxrequest/messages/Usuallyreplies";
+    console.log("insideusuallyreplies", props);
+    let params = {
+      glusrid: props,
+      modid: "MY",
+      AK: "eyJ0eXAiOiJKV1QiLCJhbGciOiJzaGEyNTYifQ.eyJpc3MiOiJVU0VSIiwiYXVkIjoiOCo5KjQqMCo3KiIsImV4cCI6MTY1NDc3MjkyOCwiaWF0IjoxNjU0Njg2NTI4LCJzdWIiOiIxMjcyNTMzMTciLCJjZHQiOiIwOC0wNi0yMDIyIn0.LOHvB0U8ZXUDXLrqb9g1k95SPjOUDnc7e-3fVKssK4U",
+    };
+
+    const res = axios.post(url, params).then((response) => {
+      if (response) {
+        console.log("usuallyreplies", response);
+      }
+    });
+  };
+
+  render() {
+    console.log(typeof this.state.contact);
+
+    return (
+      <>
+        <div id="cs11"></div>
+        <ul className="message-user-name-section" id="fetch_list">
+          <InfiniteScroll
+            className="infinite-scroll"
+            dataLength={this.state.contact.length}
+            style={{ overflow: "hidden" }}
+            next={this.fetchMoreData}
+            hasMore={this.state.contact.length <= this.state.total_count}
+            loader={<h4>Loading...</h4>}
+            scrollableTarget="fetch_list"
+          >
+            <div className="container">
+              {this.state.contact
+                ? this.state.contact.map((post) => (
+                    <>
+                      <li className="user-name1" id="0">
+                        <div className="no_cmp_logo">
+                          <span id="c1">G</span>
+                        </div>{" "}
+                        <div className="left_det_show">
+                          <div className="c-div">
+                            {" "}
+                            <p className="c_addr wrd_elip">
+                              {" "}
+                              <c_company id="cc2">
+                                {post.contacts_company
+                                  ? post.contacts_company
+                                  : post.contacts_name}
+                              </c_company>
+                              ,{" "}
+                              <c_city id="c_city2">{post.contact_city}</c_city>
+                            </p>{" "}
+                          </div>
+                          {/* {post.contacts_company ? post.contacts_name : ""}{" "} */}
+                          <div className="dispimg wrd_elip contname">
+                            <svg
+                              className="m1 mr5 ml5"
+                              width="12px"
+                              height="12px"
+                              version="1.1"
+                              viewBox="0 -1 13 15"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <title>user (8)</title>
+                              <desc>Created with Sketch.</desc>
+                              <g fill="none" fill-rule="evenodd">
+                                <g
+                                  transform="translate(-632 -218)"
+                                  fill-rule="nonzero"
+                                  stroke="#666"
+                                  stroke-width="1.3"
+                                >
+                                  <g transform="translate(428 139)">
+                                    <g transform="translate(205 80)">
+                                      <path
+                                        id="a"
+                                        d="m5.5 0c-1.8196 0-3.3 1.4804-3.3 3.3s1.4804 3.3 3.3 3.3 3.3-1.4804 3.3-3.3-1.4804-3.3-3.3-3.3z"
+                                      />
+                                      <path d="m6.5226 7.3578h-2.0452c-1.6916 0-3.361 0.78102-4.4774 2.4556v2.7021h11v-2.7021c-1.1147-1.6722-2.7837-2.4556-4.4774-2.4556z" />
+                                    </g>
+                                  </g>
+                                </g>
+                              </g>
+                            </svg>
+                            <span id="c_name">
+                              {post.contacts_company ? (
+                                <div className="abc">{post.contacts_name}</div>
+                              ) : (
+                                ""
+                              )}
+                            </span>
+                            <span id="c_number0" className="dib c_num">
+                              (08048950550)
+                            </span>{" "}
+                          </div>
+                          <p className="abscc">
+                            {" "}
+                            <span className="prd_icn_green"></span>
+                            <span className="prdct_dsply">Dyestuff</span>{" "}
+                          </p>{" "}
+                          <p className="last-msg-snippet wrd_elip ">
+                            Quantity Required: 1 Kg{" "}
+                          </p>{" "}
+                        </div>{" "}
+                      </li>
+                    </>
+                  ))
+                : ""}
+              ;
+            </div>
+          </InfiniteScroll>
+        </ul>
+      </>
+    );
+  }
+
+  componentDidMount() {
+    this.contact_list();
+  }
+}
+
+
+
+
+
+
+
+Free categories , and more details
+
+
+No call response 
+
+Better filters and search algorithms

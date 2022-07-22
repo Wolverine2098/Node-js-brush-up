@@ -1,0 +1,5 @@
+.btn-buyer{border:1px solid #216ce3;color:#fff;text-decoration:none;font-size:14px;font-weight:bold;padding:5px;text-align:center;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;background-color:#4787ed;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#67a0ff', endColorstr='#4787ed');background:-webkit-gradient(linear, left top, left bottom, from(#67a0ff), to(#4787ed));background:-moz-linear-gradient(top,  #67a0ff,  #4787ed);cursor:pointer;font-family:Arial, Helvetica, sans-serif;padding:8px;}
+.btn-buyer:hover{border:1px solid #216ce3;text-decoration:none;-webkit-box-shadow:0 3px 3px rgba(0,0,0,0.2);-moz-box-shadow:0 3px 3px rgba(0,0,0,0.2);box-shadow:0 3px 3px rgba(0,0,0,0.2)}
+.disableUser {padding:75px;font-family:'Trebuchet MS', Arial, Helvetica, sans-serif; text-align:center;transform: translate(0, -35px);}
+.fnt24 {font-size: 24px;} .mrgLft {margin-left: 5px;}
+                                            

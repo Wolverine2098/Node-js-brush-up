@@ -1,0 +1,9 @@
+{
+    "PROD_URL":{
+        "mp_extjs":"https://my.imimg.com/js-new/manageproducts-v-337.js",
+        "mydrive":"https://my.imimg.com/js-new/mydrive/mydrive-v-46.js",
+        "imlogin":"https://utils.imimg.com/header/js/imlogin-v397.js",
+        "imcropper":"https://my.imimg.com/js-new/IMCropper-v-101.js",
+        "tinymce":"https://my.imimg.com/tinymce-new/jscripts/tiny_mce/tiny_mce-v-3.js"
+    }
+}

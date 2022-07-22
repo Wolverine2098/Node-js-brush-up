@@ -1,0 +1,419 @@
+<!-- Shows Contact Details of selected contact and edit contact option -->
+
+<?php 
+if((is_array($contactdetail) && $contactdetail==array()) || (isset($contactdetail['status']) &&  ($contactdetail['status'] == 'failure' || $contactdetail['status'] == 'Failure'))){?>
+<div class="tabs-content" id="testing">
+  <div tab-id="1" class="tab active">
+  <!-- <?php //echo "---".$contactdetail."++++";?>    -->
+  </div>
+</div>
+<?php  }else{ ?>
+
+<div class="tabs-content" id="testing">
+  <div tab-id="1" class="tab active">
+    <?php 
+    // print_r("$CONTACT_DETAIL ->" . $contactdetail);
+    $name= $glid= $mobile1= $mobile2= $email= $email1= $companyname= $phonenumber = $website = $secondry_mob = $secondry_phone = $secondry_email = $address = $city = $state = $pincode = $designation = $im_contact_id = $iso = $mobile_enquiry = $contact_type = $contact_type_edit = $country_code = $country_name = $member_since = $year_of_estb = $no_of_emp = $turn_over = $business_type = $is_fraud = $last_contact_date = '';
+    if((is_array($contactdetail) && $contactdetail!=array()) && isset($contactdetail['code']) && $contactdetail['code'] == 200)
+    {
+      $contactdetail = isset($contactdetail['result'])?$contactdetail['result']:'';
+      $name= !empty($contactdetail['contacts_name'])? htmlentities($contactdetail['contacts_name']):'';
+      $name = ucfirst($name);
+      $glid= !empty($contactdetail['contacts_glid'])?$contactdetail['contacts_glid']:'';
+      $designation = !empty($contactdetail['contacts_title'])?htmlentities($contactdetail['contacts_title']):'';
+      $iso = !empty($contactdetail['contact_country_iso'])?htmlentities($contactdetail['contact_country_iso']):'';
+      $country_code = isset($contactdetail['contact_ph_country'])?$contactdetail['contact_ph_country']:'';
+      $country_code_disp = !empty($country_code)? "+".$country_code."-":'';
+      $mobile_enquiry=!empty($contactdetail['contacts_mobile1'])?$contactdetail['contacts_mobile1']:'';
+      $mobile1=!empty($contactdetail['contacts_mobile1'])?$contactdetail['contacts_mobile1']:'';
+      if(!empty($mobile1)){
+        $mobile1 = $country_code_disp.$mobile1;
+      }
+      $mobile2=!empty($contactdetail['contacts_mobile2'])?$contactdetail['contacts_mobile2']:'';
+      if(!empty($mobile2)){ 
+        $mobile2 = $country_code_disp.$mobile2;
+      }
+      $email=!empty($contactdetail['contacts_email1'])?htmlentities($contactdetail['contacts_email1']):'';
+      $email1=!empty($contactdetail['contacts_email1'])?htmlentities($contactdetail['contacts_email1']):'';
+      $companyname=!empty($contactdetail['contacts_company'])?htmlentities($contactdetail['contacts_company']):'';
+      $phonenumber = !empty($contactdetail['contacts_phone1'])?$contactdetail['contacts_phone1']:'';
+      $ph_area = !empty($contactdetail['contact_ph_area'])?htmlentities($contactdetail['contact_ph_area']):'';
+      $ph_area_disp = !empty($ph_area)? $ph_area."-":'';
+      if(!empty($phonenumber)){
+        $phonenumber = $ph_area_disp.$phonenumber;
+      }
+      $website = !empty($contactdetail['contacts_website'])?htmlentities($contactdetail['contacts_website']):'';
+      $secondry_mob = !empty($contactdetail['contacts_mobile2'])?$contactdetail['contacts_mobile2']:'';
+      $secondry_phone = !empty($contactdetail['contacts_phone2'])?$contactdetail['contacts_phone2']:'';
+      $secondry_email = !empty($contactdetail['contacts_email2'])?htmlentities($contactdetail['contacts_email2']):'';
+      $address = !empty($contactdetail['contacts_address'])?htmlentities($contactdetail['contacts_address']):'';
+      $city = !empty($contactdetail['contact_city'])?htmlentities($contactdetail['contact_city']):'';
+      $state = !empty($contactdetail['contact_state'])?htmlentities($contactdetail['contact_state']):'';
+      $pincode = !empty($contactdetail['contact_pincode'])?htmlentities($contactdetail['contact_pincode']):'';
+      $im_contact_id = !empty($contactdetail['im_contact_id'])?$contactdetail['im_contact_id']:'';
+      $contact_type =  !empty($contactdetail['contacts_type'])?$contactdetail['contacts_type']:''; 
+      $contact_type_edit =  !empty($contactdetail['contacts_type'])?$contactdetail['contacts_type']:''; 
+      $country_name       = !empty($contactdetail['glusr_usr_countryname']) ? htmlentities($contactdetail['glusr_usr_countryname'])     :   '';
+      $contact_type_rmrk  = !empty($contactdetail['contact_type_remarks'])      ? htmlentities($contactdetail['contact_type_remarks'])  :   '';
+      $member_since       = !empty($contactdetail['glusr_usr_membersince'])   ? htmlentities($contactdetail['glusr_usr_membersince'])      :   '';
+      $year_of_estb       = !empty($contactdetail['glusr_usr_year_of_estb'])  ? htmlentities($contactdetail['glusr_usr_year_of_estb'])     :   '';
+      $no_of_emp          = !empty($contactdetail['no_of_emp']) ? htmlentities($contactdetail['no_of_emp'])     :   '';
+      $turn_over          = !empty($contactdetail['turn_over']) ? htmlentities($contactdetail['turn_over'])     :   '';
+      $business_type      = !empty($contactdetail['business_type']) ? htmlentities($contactdetail['business_type'])     :   '';
+      $is_fraud           = !empty($contactdetail['is_fraud'])               ?$contactdetail['is_fraud']  :   0;
+      $last_contact_date   = !empty($contactdetail['last_contact_date'])  ?$contactdetail['last_contact_date']   :   0;
+
+      if(!empty($address) ||  $address != ' ') {
+        $address = $address." ";
+      }
+      $address            = $address.", ".$city.", ".$state.", ".$pincode;
+      $address            = preg_replace('/,+/', ', ', $address);
+      $address            = trim($address,', ');
+      if(!empty($mobile2)){
+        $mobile2 = ", ".$mobile2;
+      }
+      $mobile1 = $mobile1.$mobile2;
+      $mobile1 = ltrim($mobile1,",");
+      if(!empty($secondry_phone)){
+        $secondry_phone = ",".$ph_area_disp.$secondry_phone;
+      }
+      $phonenumber = $phonenumber.$secondry_phone;
+      $phonenumber = ltrim($phonenumber,",");
+      $secondry_email1 = '';
+      if(!empty($secondry_email)){
+        $secondry_email1 = ",".$secondry_email;
+      }
+      $email = $email.$secondry_email1;
+      $email = ltrim($email,",");
+
+      $name               = str_ireplace('&amp;#x2F;', '/', $name);
+      $companyname        = str_ireplace('&amp;#x2F;', '/', $companyname);
+    }
+    $text_html=0;
+    ?>
+    
+    <input type="hidden" id="contactsglusrid" value="<?php echo $glid ?>">
+    <input type="hidden" id="contactstypee" value="<?php echo $contact_type ?>">
+    <input type="hidden" id="recv_email" value="<?php echo $email1; ?>">
+    <input type="hidden" id="recv_alt_email" value="<?php echo $secondry_email; ?>">
+    <input type="hidden" id="receiver_name" value="<?php echo $name; ?>">
+    <input type="hidden" id="recv_mob" value="<?php echo $mobile_enquiry; ?>">
+    <input type="hidden" id="recv_org" value="<?php echo $companyname; ?>">
+    <input type="hidden" id="recv_ph" value="<?php echo $secondry_mob; ?>">
+    <input type="hidden" id="recv_location" value="<?php echo $address; ?>">
+    <input type="hidden" id="recv_id" value="<?php echo $glid; ?>">
+    <input type="hidden" id="recv_city" value="<?php echo $city; ?>">
+    <input type="hidden" id="recv_state" value="<?php echo $state; ?>">
+    <input type="hidden" id="recv_country" value="<?php echo $country_name; ?>">
+    <input type="hidden" id="recv_iso" value="<?php echo $iso; ?>">
+    <input type="hidden" id="recv_country_code" value="<?php echo $country_code; ?>">
+    <input type="hidden" id="buyer_pr_dt" value="">
+    <input type="hidden" id="recv_type_rmrk" value="<?php echo $contact_type_rmrk; ?>">
+    <!--New added Key  -->
+     <input type="hidden" id="buyer_pr_dt_new" value="">
+    <input type="hidden" id="recv_member_since" value="<?php echo $member_since; ?>">
+    <input type="hidden" id="recv_year_of_estb" value="<?php echo $year_of_estb; ?>">
+    <input type="hidden" id="recv_no_of_emp" value="<?php echo $no_of_emp; ?>">
+    <input type="hidden" id="recv_turn_over" value="<?php echo $turn_over; ?>">
+    <input type="hidden" id="recv_business_type" value="<?php echo $business_type; ?>">
+    <input type="hidden" id="recv_business_URL" value="<?php echo $website; ?>">
+    <input type="hidden" id="fraud" value="<?php echo $is_fraud; ?>" >
+    <input type="hidden" id="lst_cndt" value="<?php echo $last_contact_date; ?>" >
+    <input type="hidden" id="meta_dt" value="">
+    <div class="left-name-details">
+             <!--  <div id="sr" class="porel"> </div> -->
+             <!-- <?php  
+             if($companyname!="" && $city!="") { ?>
+             <span class="cname-msg"> <?php echo $companyname .', '.$city ?> </span>
+           <?php } else{  ?>
+            <span class="cname-msg"> <?php echo $companyname .''.$city ?> </span> <?php }?> -->
+
+                <div id="Hdr-details" class="view-details-show" style="display: none;">
+                          <?php
+                          $website_display = preg_replace("/https?:\/\//","",$website);   
+                          $website_display = rtrim($website_display,'/');
+                          if(!empty($website))
+                          {
+                          if($text_html) {?> <span style="float: left;text-align: left;width: 20px; margin-left:10px;">
+                          <?php } else { ?>
+                          <span class="dtl_icn">
+                          <?php } ?>
+                         <i class="bg-msg-1 ico Msg-web" ></i></span><span class="f1 w500" style="margin-top: 1px;"><a style="text-decoration:underline" href="http://<?=$website_display?>" onclick="getGAEventTrackingJS('messagecentre','hdr_url_clicked');" target="_blank"><?=$website_display?></a></span>
+                         <?php } ?>
+                          <input type="hidden" value="<?php echo $im_contact_id ?>" id ="im_contact" >
+                          <input type="hidden" value="<?php echo $contact_type ?>" id ="contacttype" >
+                </div>
+
+                <div id="buyer_profile_details" style="display: none;list-style: none;margin-left: 60px;font-size: 15px;margin-top: -6px;"></div>
+
+
+        
+                  <div style="right:45px; top:7px; position:absolute;">
+                   <!--  <img title="Reminder" onclick="getReminderList();trackEvent('reminder_messages','click_reminder');" id="contact_add_reminder" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJHSURBVEhLtZU/iBNBFMYXlEPUA7ERQUQ7EfwDgtpYiCJ2giAIKtpYiu2BtQpiJ9gpNnKYzqsul92MO7OZGTCIRQQLC/H0DhGEA0EPo+f3Zl/cye0jiYUffCSz+80vb9/OTJL1mut2N+f5y508HKvUuR1KqU08rGvhhT2QGptl2v7KjFvLtPuklN/Ft2tqGXs61e5ryBr3IzN2tlaQ6nT2AbjCIXI/0/4K3SuKYjot/AlALuL6eWX88UavN0X3cO1ONGcN43eofhvdCwJ0IQr0Ebic5vYoqp7DGNVUk4NRBJ7ucTP3e2tw4+4FKPX07+MTNHfXAHyQavs7niBa21X4RgzH97cBTM3ni3307SqAzwehYdtZVOnle+72AI7MUgCTMFikx8ev3183IfYMMk+F68Gtwl4KcLSVsUlS9srvR39+SpPYI8Fo32d60Uq5PYwtRS9DnFB5NBhGYTcZV6rRaGwA+IsUjjwWjDYoRpai8sXgsCcBrzCyVFu7Y3LQXcdquEAOmwgrQ8xFpuXLWGwQ4w9JISy9HlrUrey+S7nIfey8jYxNknlrt0+0IcbafmBkJapIDk9uvINHjKtES0UK/4txWJ1kXCU6U/GL76UJkxiFzTOqLjoSsWRWpYmjjDYujTq7k2bz9ZZ27s/hJXyTAJIBXWwbf2RomcVqGbMbwDe0WdCSg3i0QgINTKsIuWf0r5EV/gzyOdq5lXGVsBmetLQ9y8Ogtu6cQkUPAXqFz2VkPgLo4LuqKA5zLAgtpHP5Fg//l5LkD2BwaHsGExkrAAAAAElFTkSuQmCC" style="cursor: pointer;">
+                    --> <i id="rem_arw" class="fa fa-caret-up" aria-hidden="true" style="display:none; top: 16px; color:#ddd !important; font-size:30px !important; left:0px; position:absolute;"></i>
+                    <div id="Remindmodal" class="excel_popup remDetailpop rem_toggle_list" style="display: none;">  </div>
+                  </div>
+                  <div class="right-icon">
+                    <div id ="edit_box" style ="display: none;">
+                      <a onclick="showedit('<?php echo $iso ?>'); getGAEventTrackingJS('edit_clicked');" style="color: #00a699;font-size: 12px;float: left;">
+                        <i title="Edit Contact" class="bg-msg ico Msg-edt" aria-hidden="true"  id="edit_contact" style="cursor: pointer;zoom: 0.8;-moz-transform: scale(0.8);"></i>Edit
+                      </a> 
+                    </div>
+                    <!-- Help Section div -->
+    <!-- <div class="rightmost bg-msg Msg-hlp" onclick="openMsgHelp();getGAEventTrackingJS('messagecentre','click_help_icon','messages_help');" style="left: 0;">
+    </div>
+    <div id="helpmsg" style="position:fixed;top: 50%;margin-top: -263px; z-index: 1001;" ></div> -->
+    <!-- Seller Profile div end -->
+    <!-- <div id="seller_profile" class="seller_profile" style="display: none;" onclick="show_seller_profile();">Seller Profile<i class="bg-msg-1 msg_drop" style="background-position: -168px -12px;float: right;background-repeat: no-repeat;"></i></div>
+    <div id="seller_profile_sec" class="seller_profile_sec">
+      <div id="profile_sec1" class="profile_sec1"></div>
+      <div id="profile_sec2" class="profile_sec2"></div>
+    </div> -->
+  <!-- Help Section div end -->
+                  </div>
+                </div>
+                <div id="contactnow_pop" style="display:none;top:20%">
+                  <div id="timeline" class="edit_pop_heading">Contact Now</div>
+                  <i class="fa fa-times-circle" aria-hidden="true" style="padding:0;cursor:pointer;float:right;font-size:15px;margin-right:5px;margin-top: -40px;color: #fff;" onclick="$('#contactnow_pop').hide();$('#overlay_s').hide();"></i>
+                  <div class="cntnw_div" >
+                    <table cellpadding="5" class="ad_cont_tbl">
+                      <tr><td><textarea class="ad_cont_inp" id="enq_msg"  value="<?php ?>" style="width:535px;height:161px;resize:none"></textarea>
+                      </td></tr>
+                      <tr><td style="text-align:center;"><span  style="font-size:11px;color:red;float:right;display:none" id="err_cont">error message</span><input type="button" style="display: block;margin:10px 0 0 0;float: right;clear:right;width:125px" id="contactnow23" onclick="callEnquiry(<?php echo "'"; echo $mobile_enquiry; echo "'"; echo ","; echo $login_glid ; echo ","; echo "'";echo $glid; echo "'";echo ",";  echo $im_contact_id;echo ","; echo "'"; echo $contact_type ; echo "'";?>);" value="Send" class="cont_now_btn"></td></tr>
+                    </table>
+                  </div>
+                  <table class="cntnw_process" style="display:none;width:100%"><tr><td style="text-align:center;vertical-align:middle;width: 330px;height: 185px;">
+                    <span style="font-size:18px">Processing...</span><br>
+                    <!-- <img src="//my.imimg.com/gifs_new/messagecentre/horizontal_loading.gif"> -->
+                  </td></tr></table>
+                  <table class="cntnw_msg" style="display:none;width:100%"><tr><td style="text-align:center;vertical-align:middle;width:330px;height:215px;">
+                    <span id="msg_snt" style="font-size:18px">Your message has been sent.</span><br>
+                  </td></tr></table>
+                </div> 
+                <!-- Edit contact start-->
+                 <?php  $address = !empty($contactdetail['contacts_address'])?htmlentities($contactdetail['contacts_address']):'';
+      $mobile1 = !empty($contactdetail['contacts_mobile1'])?$contactdetail['contacts_mobile1']:'';
+      $phonenumber = !empty($contactdetail['contacts_phone1'])?$contactdetail['contacts_phone1']:'';
+      $city = !empty($contactdetail['contact_city'])?htmlentities($contactdetail['contact_city']):'';
+      $state = !empty($contactdetail['contact_state'])?htmlentities($contactdetail['contact_state']):'';
+      $pincode = !empty($contactdetail['contact_pincode'])?$contactdetail['contact_pincode']:'';
+      $email=!empty($contactdetail['contacts_email1'])?$contactdetail['contacts_email1']:'';
+      $secondry_phone = !empty($contactdetail['contacts_phone2'])?$contactdetail['contacts_phone2']:'';
+      $mobile2=!empty($contactdetail['contacts_mobile2'])?$contactdetail['contacts_mobile2']:'';
+      $country_code = isset($contactdetail['contact_ph_country'])?$contactdetail['contact_ph_country']:'';
+      $ph_area = !empty($contactdetail['contact_ph_area'])?$contactdetail['contact_ph_area']:'';
+      $secondry_email = !empty($contactdetail['contacts_email2'])?$contactdetail['contacts_email2']:'';
+      $im_contact_id = !empty($contactdetail['im_contact_id'])?$contactdetail['im_contact_id']:'';
+      $contact_type_close   = $contact_type == ""                           ? 2                                     : $contact_type;
+      ?>                
+      <div id="edit_adbook" style="display: none; background: none; top: 50%; margin-top: -285px;">
+        <form action="#" method="post" id="edit_adbook">
+          <h2>Edit Contact Details</h2>
+          <a class="edit-contact-close" title="Close" onclick="closeEdit(<?php echo $login_glid ; echo "," ;echo "'";echo $mobile1 ;echo "'"; echo "," ;echo "'"; echo $glid;echo "'";echo ","; echo "'"; echo $im_contact_id;echo "'"; echo ","; echo "'"; echo $contact_type ;echo "'";?>);" id="cls_btn" style="">
+            <i aria-hidden="true" class="fa fa-times-circle"></i>
+          </a>
+          <div class="f1" style="width:48%">
+            <p>
+              <label for="Name" class="floatLabel">Name</label>
+              <input  id="ed_name" name="Name" type="text" onfocus="$(this).addClass('active').removeClass('err-active')" onblur="$(this).removeClass('active')" value="<?php echo htmlentities($name) ?>">
+            </p>
+            <p class="alt_landline">
+              <label for="Mobile" class="floatLabel">Mobile</label>
+            </p>
+            <dl style="margin-right: 3px;" class="dropdown cont_mob flag f1" id="country-dropdown1" autocomplete="off" disabled="disabled">
+              <dt>
+                <a onfocus="enableButton();">
+                  <span style="/*background-position:0 -1694px;*/cursor:auto" ></span>
+                </a>
+                <span class="value" id="countrycode" style="color:#000"><?php echo $country_code ?></span>
+              </dt>
+              <dd>
+                <ul class="country_list" style="display:none;left:-9px;width:290px!important;"></ul>
+              </dd>
+            </dl>
+            <input id="ed_mob" onfocus="$(this).addClass('active').removeClass('err-active')" onblur="$(this).removeClass('active')" style="display: inline-block; width: 303px; cursor: not-allowed; background: #f3f3f3" name="Alternate LandLine" type="text" class="landline f1" value="<?php echo $mobile1 ?>" disabled>
+            <!-- <p style="display: none;">
+              <label for="Email" class="floatLabel">Email Id</label>
+              <input id="ed_email" onfocus="$(this).addClass('active').removeClass('err-active')" onblur="$(this).removeClass('active')" name="Email" type="text" value="<?php //echo $email ?>">
+            </p> -->
+            <p>
+              <label for="Company" class="floatLabel">Company</label>
+              <input id="ed_company" onfocus="$(this).addClass('active').removeClass('err-active')" onblur="$(this).removeClass('active')" name="Company" type="text" value= "<?php echo $companyname ?>">
+            </p>
+            <p>
+              <label for="Address line" class="floatLabel">Address</label>
+              <input id="ed_address" onfocus="$(this).addClass('active').removeClass('err-active')" onblur="$(this).removeClass('active')" name="Address line" type="text" value="<?php echo $address ?>">
+            </p>
+            <p>
+              <label for="State" class="floatLabel">State</label>
+              <input id="ed_state" onfocus="$(this).addClass('active').removeClass('err-active')" onblur="$(this).removeClass('active')" name="State" type="text" value="<?php echo $state ?>">
+            </p>
+            <!-- <p class="alt_landline">
+              <label for="Landline" class="floatLabel">Landline</label>
+              <input id="ph_area" name="std" type="text" class="std f1" placeholder="STD Code" value="<?php echo $ph_area  ?>">
+              <input id="ed_ph_number" name="Alternate LandLine" type="text" class="landline f1" value="<?php echo $phonenumber; ?>">
+            </p> -->
+          </div>
+          <div class="f2" style="width:48%">
+            <p>
+              <label for="Designation" class="floatLabel">Designation</label>
+              <input id="edit_desig" onfocus="$(this).addClass('active').removeClass('err-active')" onblur="$(this).removeClass('active')" name="Designation" type="text" value="<?php echo $designation ?>">
+            </p>
+            <!-- <p class="alt_landline">
+              <label for="Alternate Mobile" class="floatLabel">Alternate Mobile</label>
+            </p>
+            <dl style="margin-right: 10px;" class="dropdown cont_mob flag f1" id="country-dropdown_sec" autocomplete="off" disabled="disabled">
+              <dt>
+                <a onfocus="enableButton();">
+                  <span style="background-position:0px -1694px;cursor:auto;" ></span>
+                </a>
+                <span class="value" id="countrycode_sec"><?php //echo $country_code ?></span>
+              </dt>
+              <dd>
+                <ul class="country_list" style="display:none;left:-9px;width:290px!important;"></ul>
+              </dd>
+            </dl>
+            <input style="display: inline-block; width: 303px;" id="ed_mob_sec" onfocus="$(this).addClass('active').removeClass('err-active')" onblur="$(this).removeClass('active')" name="Alternate Mobile" type="text" class="landline f1" value="<?php //echo $mobile2 ?>"> -->
+            <!-- <p style="display: none;">
+              <label for="Alternate Email ID" class="floatLabel">Alternate Email ID</label>
+              <input id="ed_email_sec" onfocus="$(this).addClass('active').removeClass('err-active')" onblur="$(this).removeClass('active')" name="Alternate Email ID" type="text" value="<?php //echo $secondry_email ?>">
+            </p> -->
+            <p>
+              <label for="Website" class="floatLabel">Website</label>
+              <input id="ed_website" onfocus="$(this).addClass('active').removeClass('err-active')" onblur="$(this).removeClass('active')" name="Website" type="text" value= "<?php echo $website  ?>">
+            </p>
+            <p>
+              <label for="City" class="floatLabel">City</label>
+              <input id="ed_city" onfocus="$(this).addClass('active').removeClass('err-active')" onblur="$(this).removeClass('active')" name="City" type="text" value="<?php echo $city ?>">
+            </p>
+            <p>
+              <label for="Pincode" class="floatLabel">Pincode</label>
+              <input id="ed_pincode" onfocus="$(this).addClass('active').removeClass('err-active')" onblur="$(this).removeClass('active')" name="Pincode" type="text" value="<?php echo $pincode ?>">
+            </p>
+            <!-- <?php if(!empty($ph_area)){ ?> 
+            <p class="alt_landline">
+              <label for="Alternate Phone" class="floatLabel">Alternate Phone</label>
+              <input class="std f1" type="text" id="ph_area_sec" value="<?php echo $ph_area  ?>" disabled="disabled">
+              <input id="ed_ph_number_sec" name="Alternate Phone" type="text" class="landline f1" value="<?php echo $secondry_phone; ?>">
+            </p>
+            <?php }else{ ?>
+            <p class="alt_landline">
+              <label for="Alternate LandLine" class="floatLabel">Alternate LandLine</label>
+              <input placeholder="STD Code" class="std f1" type="text" id="ph_area_sec" value="<?php echo $ph_area  ?>">
+              <input id="ed_ph_number_sec" name="Alternate LandLine" type="text" class="landline f1" value="<?php echo $secondry_phone; ?>">
+            </p>
+            <?php } ?> -->
+          </div>
+          <p style="text-align:center;float: left;width: 100%; margin: 20px 0px 10px 0px;">
+            <input type="button" value="Save Contact" id="submit" onclick="getGAEventTrackingJS('edit_saved'); editDetails(<?php echo $login_glid ; echo ","; echo "'".$glid."'"; echo ","; echo "'"; echo $im_contact_id; echo "'";echo ","; echo "'"; echo $contact_type_edit; echo "'";?>);"> 
+            <span style="display: block; text-align: center; color: red; font-size: 12px; margin-top: 20px;" id="edt_error"></span>
+          </p>
+        </form>
+      </div>
+      <!-- Edit contact end-->
+
+      <!-- ADD CONTACT START-->
+      <div id="address_book_enq_detail" style="display:block;">
+        <div id="pop_show_hide" style="display:none" class="f2">
+          <div class="add_contact_pop" >
+            <i class="fa fa-caret-left tparw" aria-hidden="true"></i>                         
+            <div id="add_cnt"> 
+              <div class="dwn_bnr" id="add_popup">
+                <i class="fa fa-times-circle" aria-hidden="true" style="padding:0;cursor:pointer;float:right;font-size: 20px;margin: -6px;" onclick="$('#pop_show_hide').hide();"></i>
+                <span class="add_hd" >Add Contact</span>
+                <table cellpadding="5" class="ad_cont_tbl" style="font-size:14px;position:relative">
+                  <tr><td style="text-align:left;padding:0 5px">Name</td></tr><tr><td style="padding:0 5px"><input type="text" class="ad_cont_inp" id="addContactName"><span class="error_bk" id="error_nme" style="top:58px">Name cannot be blank</span></td></tr>
+                  <tr><td style="text-align:left;padding:10px 5px 0 5px">Mobile</td></tr><tr><td style="padding:0 5px"><span class="ph_area">
+                  <dl class="dropdown cont_mob flag f1"  autocomplete="off"> <dt><a><span style="background-position:0px -1694px;cursor:auto;"></span></a><span class="value" id="cntry_code">+91</span></dt>
+                    <dd> <ul class="country_list" style="display:none;left:-9px;width:290px!important;"></ul></dd>
+                  </dl>
+                  <input type="text" style="width: 195px" class="ph_tbx" id="addContactMobile" maxlength="10"></span><span class="error_bk" id="error_mob" style="top:125px"> Mobile Number cannot be blank</span></td></tr>
+                  <tr><td style="text-align:left;padding:10px 5px 0 5px">Note</td></tr>
+                  <tr><td style="padding:0 5px"><textarea type="text" class="ad_cont_inp" style="max-width:294px; max-height:200px; min-width:280px; min-height:100px;" id="addContactNote"></textarea></td></tr>
+                  <tr><td style="text-align:right;padding:10px 5px 0 5px" colspan="2"><input type="button" id="addcon" value="Add Contact" class="cont_now_btn" onclick = "getGAEventTrackingJS('add_contact'); addContact(<?php echo $login_glid ?>);" style="margin-top:6px">
+                  <span class="error_bk" id="add-contact-error" style="top:140px; display:block;"></span>
+                  </td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="success" style="display:none;" class="f2">
+          <i class="fa fa-times-circle cross_icn_add" aria-hidden="true" style="" onclick="$('#success').hide();"></i>
+          <div class="add_contact_pop" >
+            <i id= "arraow" class="fa fa-caret-left tparw" aria-hidden="true"></i>                         
+            <div id="add_cnt"> 
+              <div class="dwn_bnr" >
+                <table style="cursor:default;margin-top:60px;width:100%"><tbody style="cursor: default;">
+                  <tr><td style="text-align: center;"><i class="fa fa-check-square-o" aria-hidden="true" style="color: green;font-size: 40px;"></i></td></tr>
+                  <tr style="cursor: default;"><td style="text-align: center;font-size: 17px;color: green;cursor: default;padding: 0 20px;"><b style="font-size:21px;margin-bottom: 5px;display: block;">Success</b>Contact Added Successfully </td></tr></tbody></table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div  id="alrexist" style="display:none;" class="f2">
+            <i id= "arraow" class="fa fa-times-circle cross_icn_add" aria-hidden="true" onclick="$('#alrexist').hide();"></i>
+            <div class="add_contact_pop" >
+              <i class="fa fa-caret-left tparw" aria-hidden="true"></i>                         
+              <div id="add_cnt"> 
+                <div class="dwn_bnr" >
+                <i class="fa fa-times-circle" aria-hidden="true" style="padding:0;cursor:pointer;float:right;font-size: 20px;margin: 3px;" onclick="$('#alrexist').hide();"></i>
+                  <table style="cursor: default;margin-top: 60px;width:100%"><tbody style="cursor: default;">
+                    <tr><td style="text-align: center;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size: 40px; color: rgb(253, 179, 0);"></i></td></tr>
+                    <tr style="cursor: default;"><td style="text-align: center;font-size: 17px;color: green;cursor: default;padding: 0 20px;">
+                    <span id="alreadyExist">A contact with the same mobile number already exists. Please add a new number</span></td></tr></tbody></table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ADD CONTACT END-->
+          <script>
+            var iso_by_ip = document.getElementById('recv_iso').value;
+
+            var isd_suggestor = new Suggester({"type":"isd","element":"country-dropdownmy","onSelect":selectCountryedit, fields: "cname,iso,icon_order", displayFields:"cname,value",displaySeparator:"  +","defaultValue":iso_by_ip});
+
+            function selectCountryedit(event , ob)
+            {
+              $("#country-dropdown1 dt a span").attr('style','background-position:0px -'+ob.data.icon_order*11+'px');
+              $("#country-dropdown1 dt span.value").html('+'+ob.value);
+            }
+            function selectCountryedit_sec(event , ob)
+            {
+              $("#country-dropdown_sec dt a span").attr('style','background-position:0px -'+ob.data.icon_order*11+'px');
+              $("#country-dropdown_sec dt span.value").html('+'+ob.value);
+            }
+            $('.tabbb span').on('click', function() {
+              $(this).addClass('active').siblings().removeClass('active');
+            });
+            $('.ad_edit_tabs nav a').on('click', function() {
+              show_content($(this).index());
+            });
+            show_content(0);
+            function show_content(index) {
+              $('.ad_edit_tabs .content.visible').removeClass('visible');
+              $('.ad_edit_tabs .content:nth-of-type(' + (index + 1) + ')').addClass('visible');
+              $('.butnss').addClass('visible');
+              $('.ad_edit_tabs nav a.selected').removeClass('selected');
+              $('.ad_edit_tabs nav a:nth-of-type(' + (index + 1) + ')').addClass('selected');
+            }
+//             $(document).ready(function() {
+//               $('.nav-toggle').click(function(){
+//             //get collapse content selector
+//             getGAEventTrackingJS('view-detail_clicked');
+//             var collapse_content_selector = $(this).attr('data-href');
+//             //make the collapse content to be shown or hide
+//             var toggle_switch = $(this);
+//             $(collapse_content_selector).toggle(function(){
+//               if($(this).css('display')=='none'){
+//                   //change the button label to be 'Show'
+//                   toggle_switch.html('View Details <i class="fa fa-sort-desc" aria-hidden="true"></i>');
+//                 }else{
+//                  //change the button label to be 'Hide'
+//                  toggle_switch.html('View Details <i class="fa fa-caret-up" aria-hidden="true"></i>');
+//                }
+//              });
+//           });
+//     });
+  </script>
+  <?php } ?>
