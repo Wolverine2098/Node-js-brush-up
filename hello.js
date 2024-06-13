@@ -1,1 +1,2 @@
-console.log("hey from node.js");
+//dom manipulations are not available here
+console.log("hey from node.js 2");
