@@ -1,22 +1,17 @@
-const http = require("http");
-const fs = require("fs");
+const express = require("express");
 
-const myServer = http.createServer((req, res) => {
-  const log = `${Date.now()}: new req recieved at ${req.url} \n`;
-  fs.appendFile("log.txt", log, (err) => {});
+const app = express();
 
-  switch (req.url) {
-    case "/":
-      res.end("hello from server");
-      break;
-    case "/about":
-      res.end("This is about page");
-      break;
-    default:
-      res.end("page not found");
-  }
+app.get("/", (req, res) => {
+  return res.send("hello from home page");
 });
 
-myServer.listen(8000, () => {
-  console.log("server started");
+app.get("/about", (req, res) => {
+  return res.send(`Hello ${req.query.name} your age is ${req.query.age}`);
 });
+
+app.get("/profile", (req, res) => {
+  return res.send("this is a profile change");
+});
+
+app.listen(8000, () => console.log("server started"));
